@@ -1,0 +1,27 @@
+{
+  "name": "health_reporter",
+  "version": "1.0.0",
+  "description": "Log your weight daily",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:adaha287/health_reporter.git"
+  },
+  "keywords": [
+    "Health",
+    "Weight",
+    "Log"
+  ],
+  "author": "Adam Hansson",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "mongodb": "*",
+    "mongoose": "*"
+  }
+}
