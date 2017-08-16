@@ -1,35 +1,43 @@
 var labels = [];
 var weights = [];
+var chart;
+var ctx = document.getElementById('myChart').getContext('2d');
+var ipAddress = "192.168.1.3";
+var body = document.getElementsByTagName("BODY")[0];
+body.onload = function(){
+	loadWeights();
+}
 
-function httpGetAsync(theUrl, callback)
-{
+function httpGetAsync(theUrl, callback){
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
             callback(xmlHttp.responseText);
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
 
-function saveWeights(response){
-	labels = [];
-	weights = [];
-	for (entries in response.body.result){
-		labels.append(entries.date)
-		weights.append(entries.weight)
+//Save weight records in an array
+function storeResponse(response){
+	if(response !== undefined && response !== ""){
+		var obj = JSON.parse(response)
+		weights = obj.data.weights
+		labels = obj.data.dates
+		createNewChart()
 	}
 }
 
+//Get weights from server
 function loadWeights(){
-	httpGetAsync("http://localhost:4000/weights", saveWeights)
+	httpGetAsync("http://"+ipAddress+":4000/weights", storeResponse);
 }
 
+//Send a weight to store in the database
 function sendWeight(){
 	var http = new XMLHttpRequest();
-	var url = "http://localhost:4000/logweight";
+	var url = "http://"+ipAddress+":4000/logweight";
 	var w = document.getElementById("weight").value
-	console.log("sending value:", w)
 	var params = JSON.stringify({"weight": Number(w)});
 	http.open("POST", url, true);
 
@@ -42,4 +50,39 @@ function sendWeight(){
 		}
 	}
 	http.send(params);
+}
+
+function createNewChart(){
+	if (typeof chart !== 'undefined') {
+		chart.destroy()
+	}
+	ctx = document.getElementById('myChart').getContext('2d');
+	chart = new Chart(ctx, {
+	// The type of chart we want to create
+	type: 'line',
+
+	// The data for our dataset
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "My weight",
+            backgroundColor: 'rgb(0, 255, 132)',
+            borderColor: 'rgb(0, 0, 0)',
+            data: weights,
+            steppedLine: true
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+    	scales: {
+            yAxes: [{
+                ticks: {
+                    min: 50,
+                    max: 75
+                }
+            }]
+        }
+    }
+	});
 }
