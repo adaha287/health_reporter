@@ -21,7 +21,6 @@ mongoose.connect('mongodb://localhost:27017/test',{useMongoClient: true}, functi
 });
 
 function getData(res){
-	console.log( "in get data")
 	//use the find() API and pass an empty query object to retrieve all records
 	dbObject.collection("weights").find({}).toArray(function(err, docs){
 		if ( err ) throw err;
@@ -30,42 +29,33 @@ function getData(res){
 		for ( index in docs){
 	    	var doc = docs[index];
 			//category array
-	        var day = doc['date'];
-	        //series 1 values array
+	        var day = JSON.stringify(doc['date']);
+	        day = day.substr(1, 10);
+	        dateArray.push(day);
+
 	        var weight = doc['weight'];
-	        monthArray.push({"label": day});
-	        weights.push({"value" : weight});
+	        weights.push(weight);
 	    }
 	     
-	    var dataset = [
-	      {
-	        "seriesname" : "My weight changes",
-	        "data" : weights
-	      }
-	    ];
-	     
 	    var response = {
-	      "dataset" : dataset,
-	      "categories" : dateArray
+			"weights" : weights,
+			"dates" : dateArray
 	    };
+	    res.json({success: true, data: response});
     });
-	res.json({success: true, data: response});
 }
 
 
 app.post('/logweight', function(req, res){
-	console.log("In post/logweight!!");
     var object = new Weight();
     object.weight = req.body.weight;
     console.log("Weight is:", object.weight);
     console.log("Type is:", typeof(object.weight))
     if(object.weight > 40.0 && object.weight < 90.0){
-    	console.log("Correct value, saving");
         object.save();
         res.json({success: true, message: 'Saved weight', weight: object.weight});
     }
     else{
-    	console.log("Not correct value!");
         res.json({success: false, message: 'Weight not correctly entered, should be between 40 and 90 kilograms'});
     }
 });
@@ -73,7 +63,6 @@ app.post('/logweight', function(req, res){
 
 
 app.get("/weights", function(req, res){
-	console.log("/weights requested!!!!");
 	getData(res)
 });
 
