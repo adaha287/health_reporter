@@ -4,14 +4,44 @@
 <head>
 	<base href="/">
 	<meta charset="utf-8">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 	<title>Health reporter</title>
+	
+	
+	
 </head>
 <body>
-<form>
-	<label>Weight</label>
-	<input type="text" name="weight">
-	<input type="submit" name="submit">
+	<div>
+		<label>Weight:</label>
+		<input type="text" id="weight">
+		<input type="button" name="sendWeight" value="Save weight" onclick="sendWeight()">
+	</div>
+	<div>
+		<input type="button" name="update-button" value="Update" onclick="loadWeight()"></input>
+	</div>
+	<canvas id="myChart"></canvas>
 
-</form>
+	<script type="text/javascript">
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var chart = new Chart(ctx, {
+	    	// The type of chart we want to create
+	    	type: 'line',
+
+			// The data for our dataset
+		    data: {
+		        labels: labels,
+		        datasets: [{
+		            label: "My weight",
+		            backgroundColor: 'rgb(255, 99, 132)',
+		            borderColor: 'rgb(255, 60, 60)',
+		            data: weights
+		        }]
+		    },
+
+		    // Configuration options go here
+		    options: {}
+		});
+	</script>
 </body>
 </html>
