@@ -2,7 +2,7 @@ var labels = [];
 var weights = [];
 var chart;
 var ctx = document.getElementById('myChart').getContext('2d');
-var ipAddress = "192.168.1.3";
+var ipAddress = "192.168.1.11";
 var body = document.getElementsByTagName("BODY")[0];
 body.onload = function(){
 	loadWeights();
