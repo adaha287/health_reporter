@@ -78,8 +78,9 @@ function createNewChart(){
     	scales: {
             yAxes: [{
                 ticks: {
-                    min: 50,
-                    max: 75
+                    min: 60,
+                    max: 70,
+                    stepSize: 0.2
                 }
             }]
         }
