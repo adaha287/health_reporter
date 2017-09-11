@@ -49,8 +49,6 @@ function getData(res){
 app.post('/logweight', function(req, res){
     var object = new Weight();
     object.weight = req.body.weight;
-    console.log("Weight is:", object.weight);
-    console.log("Type is:", typeof(object.weight))
     if(object.weight > 40.0 && object.weight < 90.0){
         object.save();
         res.json({success: true, message: 'Saved weight', weight: object.weight});
