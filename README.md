@@ -1,2 +1,3 @@
-# health_reporter
-A diary for your health. Post how you feel, your weight and what you have been training today.
+# health reporter
+Currently you can enter your weight and see the all your saved weights in a chart.
+
